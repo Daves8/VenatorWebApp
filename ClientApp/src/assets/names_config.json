@@ -1,0 +1,8 @@
+{
+  "site_name": "Venator",
+  "page_names": {
+    "home": "Домашня сторінка",
+    "login": "Вхід",
+    "registration": "Реєстрація"
+  }
+}
