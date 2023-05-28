@@ -3,15 +3,15 @@ using VenatorWebApp.Services;
 
 namespace VenatorWebApp.Controllers
 {
-    [ApiController]
     [Route("api/[controller]")]
-    public class AuthController : ControllerBase
+    [ApiController]
+    public class ItemController : ControllerBase
     {
-        private readonly IAuthService _authService;
+        private readonly IItemService _itemService;
 
-        public AuthController(IAuthService authService)
+        public ItemController(IItemService itemService)
         {
-            _authService = authService;
+            _itemService = itemService;
         }
 
         [HttpGet("test")]

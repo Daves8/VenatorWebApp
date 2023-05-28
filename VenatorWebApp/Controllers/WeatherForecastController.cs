@@ -18,20 +18,6 @@ namespace VenatorWebApp.Controllers
             _logger = logger;
         }
 
-
-        public class A
-        {
-            public A() { }
-            public A(string text)
-            {
-                this.text = text;
-            }
-            public string text { get; set; }
-        }
-
-        [HttpGet("get")]
-        public A Get2() => new A("Test get2 OK1");
-
         [HttpGet]
         public IEnumerable<WeatherForecast> Get()
         {

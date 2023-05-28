@@ -1,6 +1,8 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using VenatorWebApp.DAL;
+using VenatorWebApp.DAL.Impl;
 using VenatorWebApp.Models.Common;
 using VenatorWebApp.Services;
 using VenatorWebApp.Services.Impl;
@@ -9,8 +11,20 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
-builder.Services.AddControllers();//WithViews();
-//builder.Services.AddSingleton<IUserService, UserService>();
+builder.Services.AddControllers(); // WithViews();
+
+// Services
+builder.Services.AddSingleton<IAuthService, AuthService>();
+builder.Services.AddSingleton<IUserService, UserService>();
+builder.Services.AddSingleton<IItemService, ItemService>();
+builder.Services.AddSingleton<IContentService, ContentService>();
+builder.Services.AddSingleton<IMessageService, MessageService>();
+
+// DAO
+builder.Services.AddSingleton<IUserDao, UserDao>();
+builder.Services.AddSingleton<IItemDao, ItemDao>();
+builder.Services.AddSingleton<IContentDao, ContentDao>();
+builder.Services.AddSingleton<IMessageDao, MessageDao>();
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
