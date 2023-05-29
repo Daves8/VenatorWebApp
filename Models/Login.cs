@@ -11,9 +11,6 @@ namespace VenatorWebApp.Models
             return base.ToString() + $", Password={Password}";
         }
 
-        public bool IsValid0()
-        {
-            return !string.IsNullOrEmpty(Name) && !string.IsNullOrEmpty(Password);
-        }
+        public override bool IsValid() => !string.IsNullOrEmpty(Name) && !string.IsNullOrEmpty(Password);
     }
 }

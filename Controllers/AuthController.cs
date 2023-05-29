@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using VenatorWebApp.Models;
 using VenatorWebApp.Services;
+using VenatorWebApp.Services.Exceptions;
 
 namespace VenatorWebApp.Controllers
 {
@@ -16,5 +18,13 @@ namespace VenatorWebApp.Controllers
 
         [HttpGet("test")]
         public string Test() => "Ok";
+
+        [HttpPost("login")]
+        public User Login(Login login)
+        {
+            var result = _authService.Login(login);
+            Response.Headers.Add("Authorization", "Bearer " + result.token);
+            return result.user;
+        }
     }
 }

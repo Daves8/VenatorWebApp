@@ -6,7 +6,7 @@ namespace VenatorWebApp.Services
     {
         User GetUser(int id);
         User GetUserByUsername(string username);
-        User GetUserByEmail(string username);
+        User GetUserByEmail(string email);
         IEnumerable<User> GetAllUsers();
         void CreateUser(User user);
         void UpdateUser(User user);

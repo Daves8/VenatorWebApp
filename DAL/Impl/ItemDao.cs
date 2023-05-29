@@ -25,7 +25,7 @@ namespace VenatorWebApp.DAL.Impl
             throw new NotImplementedException();
         }
 
-        public void DeleteItemInUser(Item item, User user)
+        public void DeleteItemInUser(Item item, User user, ItemIn itemIn)
         {
             throw new NotImplementedException();
         }
@@ -45,7 +45,7 @@ namespace VenatorWebApp.DAL.Impl
             throw new NotImplementedException();
         }
 
-        public IEnumerable<Item> QueryAllItemsByUser(User user, ItemIn itemIn)
+        public IEnumerable<Item> QueryAllItemsInUser(User user, ItemIn itemIn)
         {
             throw new NotImplementedException();
         }

@@ -24,7 +24,17 @@ namespace VenatorWebApp.DAL.Impl
             throw new NotImplementedException();
         }
 
+        public User QueryUserByEmail(string email)
+        {
+            throw new NotImplementedException();
+        }
+
         public User QueryUserByUsername(string username)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Statistics QueryUserStatistics(User user)
         {
             throw new NotImplementedException();
         }

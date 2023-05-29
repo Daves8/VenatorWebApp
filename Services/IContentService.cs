@@ -10,8 +10,9 @@ namespace VenatorWebApp.Services
         IEnumerable<Topic> GetAllTopics();
         IEnumerable<Comment> GetAllComments(Textual parent);
         News GetNews(int id);
-        News GetTopic(int id);
+        Topic GetTopic(int id);
         void Hide(Textual textual);
+        void UnHide(Textual textual);
         void CreateReaction(Textual textual, ReactionType type);
         void CreateNews(News news);
         void UpdateNews(News news);

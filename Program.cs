@@ -5,13 +5,17 @@ using VenatorWebApp.DAL;
 using VenatorWebApp.DAL.Impl;
 using VenatorWebApp.Models.Common;
 using VenatorWebApp.Services;
+using VenatorWebApp.Services.Exceptions;
 using VenatorWebApp.Services.Impl;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
-builder.Services.AddControllers(); // WithViews();
+builder.Services.AddControllers(options => // WithViews();
+{
+    options.Filters.Add<HttpResponseExceptionFilter>();
+});
 
 // Services
 builder.Services.AddSingleton<IAuthService, AuthService>();

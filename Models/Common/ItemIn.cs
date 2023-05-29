@@ -2,7 +2,7 @@
 {
     public enum ItemIn
     {
-        inventory,
-        cart
+        Inventory,
+        Cart
     }
 }

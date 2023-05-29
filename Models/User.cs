@@ -17,9 +17,6 @@ namespace VenatorWebApp.Models
             return base.ToString() + $", FullName={FullName}, Email={Email}, PhoneNumber={PhoneNumber}, ImageUrl={ImageUrl}, Role={Role}, GoldAmount={GoldAmount}";
         }
 
-        public bool IsValid0()
-        {
-            return base.IsValid0() && Email != null;
-        }
+        public override bool IsValid() => base.IsValid() && !string.IsNullOrEmpty(Email);
     }
 }

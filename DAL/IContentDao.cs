@@ -14,11 +14,11 @@ namespace VenatorWebApp.DAL
         void CreateNews(News news);
         void UpdateNews(News news);
         void DeleteNews(News news);
-        News QueryTopic(int id);
+        Topic QueryTopic(int id);
         void CreateTopic(Topic topic);
         void UpdateTopic(Topic topic);
         void DeleteTopic(Topic topic);
-        News QueryComment(int id);
+        Comment QueryComment(int id);
         void CreateComment(Comment comment);
         void UpdateComment(Comment comment);
         void DeleteComment(Comment comment);

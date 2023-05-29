@@ -10,5 +10,7 @@ namespace VenatorWebApp.Models
         public double Price { get; set; }
         public bool IsHidden { get; set; }
         public string ImageUrl { get; set; } // byte[]?
+
+        public override bool IsValid() => true;
     }
 }

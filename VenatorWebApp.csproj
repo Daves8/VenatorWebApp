@@ -27,6 +27,7 @@
   <ItemGroup>
     <Folder Include="ClientApp\src\app\service\" />
     <Folder Include="ClientApp\src\app\model\" />
+    <Folder Include="DAL\Abstract\" />
   </ItemGroup>
 
     <Target Name="DebugEnsureNodeEnv" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('$(SpaRoot)node_modules') ">

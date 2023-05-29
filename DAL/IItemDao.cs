@@ -8,10 +8,10 @@ namespace VenatorWebApp.DAL
         Item QueryItem(int id);
         IEnumerable<Item> QueryAllItems();
         IEnumerable<Item> QueryAllItems(bool isHidden);
-        IEnumerable<Item> QueryAllItemsByUser(User user, ItemIn itemIn);
+        IEnumerable<Item> QueryAllItemsInUser(User user, ItemIn itemIn);
         void AddItemToUser(Item item, User user, ItemIn itemIn);
         void ModifyItemInUser(Item item, User user, ItemIn itemIn);
-        void DeleteItemInUser(Item item, User user);
+        void DeleteItemInUser(Item item, User user, ItemIn itemIn);
         void DeleteAllItemsInUser(User user, ItemIn itemIn);
         void CreateItem(Item item);
         void UpdateItem(Item item);

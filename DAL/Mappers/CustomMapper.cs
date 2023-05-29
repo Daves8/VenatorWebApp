@@ -14,7 +14,7 @@ namespace VenatorWebApp.DAL.Mapper
                 case Type t when t == typeof(Item):
                     return GetItemMapper();
                 default:
-                    throw new ArgumentException("Custom mapper for type = {type} not found.");
+                    throw new ArgumentException($"Custom mapper for type = {type} not found.");
             }
         }
 

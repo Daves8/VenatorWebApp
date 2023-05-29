@@ -15,7 +15,6 @@ namespace VenatorWebApp.Services
         void RemoveAllItemsFromCart(User user);
         void BuyItem(Item item, User user);
         void BuyItemsInCart(User user);
-        void BuyItems(IEnumerable<Item> items, User user);
         void CreateItem(Item item);
         void UpdateItem(Item item);
         void DeleteItem(Item item);

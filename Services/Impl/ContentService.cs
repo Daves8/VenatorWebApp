@@ -2,6 +2,7 @@
 using VenatorWebApp.Models;
 using VenatorWebApp.Models.Abstracts;
 using VenatorWebApp.Models.Common;
+using VenatorWebApp.Services.Exceptions;
 
 namespace VenatorWebApp.Services.Impl
 {
@@ -18,82 +19,81 @@ namespace VenatorWebApp.Services.Impl
 
         public void CreateComment(Comment comment)
         {
-            throw new NotImplementedException();
+            if (!comment.IsValid())
+            {
+                throw new HttpResponseException("Коментар пустий або перевищує максимальну довжину");
+            }
+            _contentDao.CreateComment(comment);
         }
 
         public void CreateNews(News news)
         {
-            throw new NotImplementedException();
+            if (!news.IsValid())
+            {
+                throw new HttpResponseException("Новина пуста або перевищує максимальну довжину");
+            }
+            _contentDao.CreateNews(news);
         }
 
-        public void CreateReaction(Textual textual, ReactionType type)
-        {
-            throw new NotImplementedException();
-        }
+        public void CreateReaction(Textual textual, ReactionType type) => _contentDao.CreateReaction(textual, type);
 
         public void CreateTopic(Topic topic)
         {
-            throw new NotImplementedException();
+            if (!topic.IsValid())
+            {
+                throw new HttpResponseException("Запис пустий або перевищує максимальну довжину");
+            }
+            _contentDao.CreateTopic(topic);
         }
 
-        public void DeleteComment(Comment comment)
-        {
-            throw new NotImplementedException();
-        }
+        public void DeleteComment(Comment comment) => _contentDao.DeleteComment(comment);
 
-        public void DeleteNews(News news)
-        {
-            throw new NotImplementedException();
-        }
+        public void DeleteNews(News news) => _contentDao.DeleteNews(news);
 
-        public void DeleteTopic(Topic topic)
-        {
-            throw new NotImplementedException();
-        }
+        public void DeleteTopic(Topic topic) => _contentDao.DeleteTopic(topic);
 
-        public IEnumerable<Comment> GetAllComments(Textual parent)
-        {
-            throw new NotImplementedException();
-        }
+        public IEnumerable<Comment> GetAllComments(Textual parent) => _contentDao.QueryAllComments(parent);
 
-        public IEnumerable<News> GetAllNews()
-        {
-            throw new NotImplementedException();
-        }
+        public IEnumerable<News> GetAllNews() => _contentDao.QueryAllNews();
 
-        public IEnumerable<Topic> GetAllTopics()
-        {
-            throw new NotImplementedException();
-        }
+        public IEnumerable<Topic> GetAllTopics() => _contentDao.QueryAllTopics();
 
-        public News GetNews(int id)
-        {
-            throw new NotImplementedException();
-        }
+        public News GetNews(int id) => _contentDao.QueryNews(id);
 
-        public News GetTopic(int id)
-        {
-            throw new NotImplementedException();
-        }
+        public Topic GetTopic(int id) => _contentDao.QueryTopic(id);
 
-        public void Hide(Textual textual)
-        {
-            throw new NotImplementedException();
-        }
+        public void Hide(Textual textual) => ChangeVisibility(textual, true);
 
-        public void UpdateComment(Comment comment)
-        {
-            throw new NotImplementedException();
-        }
+        public void UnHide(Textual textual) => ChangeVisibility(textual, false);
 
-        public void UpdateNews(News news)
-        {
-            throw new NotImplementedException();
-        }
+        public void UpdateComment(Comment comment) => _contentDao.UpdateComment(comment);
 
-        public void UpdateTopic(Topic topic)
+        public void UpdateNews(News news) => _contentDao.UpdateNews(news);
+
+        public void UpdateTopic(Topic topic) => _contentDao.UpdateTopic(topic);
+
+        protected void ChangeVisibility(Textual textual, bool value)
         {
-            throw new NotImplementedException();
+            switch (textual)
+            {
+                case Comment comment:
+                    var queriedComment = _contentDao.QueryComment(textual.Id);
+                    queriedComment.IsHidden = value;
+                    _contentDao.UpdateComment(queriedComment);
+                    break;
+                case News news:
+                    var queriedNews = _contentDao.QueryNews(textual.Id);
+                    queriedNews.IsHidden = value;
+                    _contentDao.UpdateNews(queriedNews);
+                    break;
+                case Topic topic:
+                    var queriedTopic = _contentDao.QueryTopic(textual.Id);
+                    queriedTopic.IsHidden = value;
+                    _contentDao.UpdateTopic(queriedTopic);
+                    break;
+                default:
+                    throw new ArgumentException();
+            }
         }
     }
 }

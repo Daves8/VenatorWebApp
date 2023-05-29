@@ -56,7 +56,7 @@ namespace VenatorWebApp.DAL.Impl
             throw new NotImplementedException();
         }
 
-        public News QueryComment(int id)
+        public Comment QueryComment(int id)
         {
             throw new NotImplementedException();
         }
@@ -66,7 +66,7 @@ namespace VenatorWebApp.DAL.Impl
             throw new NotImplementedException();
         }
 
-        public News QueryTopic(int id)
+        public Topic QueryTopic(int id)
         {
             throw new NotImplementedException();
         }

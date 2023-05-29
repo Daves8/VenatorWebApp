@@ -4,8 +4,7 @@ namespace VenatorWebApp.Services
 {
     public interface IAuthService
     {
-        User Login(Login login);
-        User Register(User user);
-        User Authorize(User user);
+        (User user, string token) Login(Login login);
+        (User user, string token) Register(User user);
     }
 }

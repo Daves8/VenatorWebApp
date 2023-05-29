@@ -14,7 +14,7 @@ namespace VenatorWebApp.DAL.Impl
             throw new NotImplementedException();
         }
 
-        public IEnumerable<Message> QueryAllMessagesBetweenUsers(User user1, User user2)
+        public IEnumerable<Message> QueryMessagesBetweenUsers(User user1, User user2)
         {
             throw new NotImplementedException();
         }
