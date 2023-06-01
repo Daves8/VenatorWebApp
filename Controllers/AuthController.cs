@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using VenatorWebApp.Models;
 using VenatorWebApp.Services;
-using VenatorWebApp.Services.Exceptions;
 
 namespace VenatorWebApp.Controllers
 {

@@ -7,6 +7,8 @@ using VenatorWebApp.Models.Common;
 using VenatorWebApp.Services;
 using VenatorWebApp.Services.Exceptions;
 using VenatorWebApp.Services.Impl;
+using VenatorWebApp.Services.Util;
+using VenatorWebApp.Services.Util.Impl;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -29,6 +31,9 @@ builder.Services.AddSingleton<IUserDao, UserDao>();
 builder.Services.AddSingleton<IItemDao, ItemDao>();
 builder.Services.AddSingleton<IContentDao, ContentDao>();
 builder.Services.AddSingleton<IMessageDao, MessageDao>();
+
+// Util
+builder.Services.AddSingleton<IFillModelsService, FillModelsService>();
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>

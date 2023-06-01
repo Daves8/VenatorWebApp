@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using VenatorWebApp.Models;
 using VenatorWebApp.Services;
 
 namespace VenatorWebApp.Controllers
@@ -16,5 +17,8 @@ namespace VenatorWebApp.Controllers
 
         [HttpGet("test")]
         public string Test() => "Ok";
+
+        [HttpGet("{id}")]
+        public Message GetUser(int id) => _messageService.GetMessage(id);
     }
 }

@@ -1,5 +1,4 @@
-﻿using VenatorWebApp.Models.Abstracts;
-using VenatorWebApp.Models.Common;
+﻿using VenatorWebApp.Models.Common;
 
 namespace VenatorWebApp.Models
 {

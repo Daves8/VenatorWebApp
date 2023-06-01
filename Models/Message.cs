@@ -6,6 +6,9 @@ namespace VenatorWebApp.Models
     {
         public User ToUser { get; set; }
 
+        //TODO: rework
+        public int ToUserId { get; set; }
+
         public override bool IsValid() => !string.IsNullOrEmpty(Text);
     }
 }

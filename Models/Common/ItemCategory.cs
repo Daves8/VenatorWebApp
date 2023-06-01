@@ -2,6 +2,7 @@
 {
     public enum ItemCategory
     {
+        //TODO: simplify?
         House,
         Shop,
         Horse,

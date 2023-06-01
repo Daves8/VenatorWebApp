@@ -1,17 +1,19 @@
 ﻿using VenatorWebApp.DAL;
 using VenatorWebApp.Models;
 using VenatorWebApp.Models.Common;
+using VenatorWebApp.Services.Base;
 using VenatorWebApp.Services.Exceptions;
+using VenatorWebApp.Services.Util;
 
 namespace VenatorWebApp.Services.Impl
 {
-    public class UserService : IUserService
+    public class UserService : BaseService, IUserService
     {
         private readonly IUserDao _userDao;
         private readonly IItemDao _itemDao;
         private readonly ILogger<UserService> _logger;
 
-        public UserService(IUserDao userDao, IItemDao itemDao, ILogger<UserService> logger)
+        public UserService(IUserDao userDao, IItemDao itemDao, IFillModelsService fillModelsService, ILogger<UserService> logger) : base(fillModelsService)
         {
             _userDao = userDao;
             _itemDao = itemDao;
@@ -39,13 +41,13 @@ namespace VenatorWebApp.Services.Impl
 
         public void DeleteUser(User user) => _userDao.DeleteUser(user);
 
-        public IEnumerable<User> GetAllUsers() => _userDao.QueryAllUsers();
+        public IEnumerable<User> GetAllUsers() => _userDao.QueryAllUsers().ToList().Select(o => { return Fill(o); });
 
-        public User GetUser(int id) => _userDao.QueryUser(id);
+        public User GetUser(int id) => Fill(_userDao.QueryUser(id));
 
-        public User GetUserByEmail(string email) => _userDao.QueryUserByEmail(email);
+        public User GetUserByEmail(string email) => Fill(_userDao.QueryUserByEmail(email));
 
-        public User GetUserByUsername(string username) => _userDao.QueryUserByUsername(username);
+        public User GetUserByUsername(string username) => Fill(_userDao.QueryUserByUsername(username));
 
         public Statistics GetUserStatistics(User user)
         {
@@ -58,7 +60,7 @@ namespace VenatorWebApp.Services.Impl
             statistics.GoldSpent = itemsInUser?.Sum(item => item.Price) ?? 0;
             statistics.TotalItems = itemsInUser?.Count() ?? 0;
 
-            return statistics;
+            return Fill(statistics);
         }
 
         public void UpdateUser(User user)

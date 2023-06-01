@@ -9,7 +9,10 @@ namespace VenatorWebApp.DAL
         IEnumerable<News> QueryAllNews();
         IEnumerable<Topic> QueryAllTopics();
         IEnumerable<Comment> QueryAllComments(Textual parent);
-        void CreateReaction(Textual textual, ReactionType type);
+        void CreateReaction(Textual textual, User user, ReactionType type);
+        void ModifyReaction(Textual textual, User user, ReactionType type);
+        void DeleteReaction(Textual textual, User user);
+        bool CheckReaction(Textual textual, User user, ReactionType type);
         News QueryNews(int id);
         void CreateNews(News news);
         void UpdateNews(News news);

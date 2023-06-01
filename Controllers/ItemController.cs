@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using VenatorWebApp.Models;
 using VenatorWebApp.Services;
 
 namespace VenatorWebApp.Controllers
@@ -16,5 +17,9 @@ namespace VenatorWebApp.Controllers
 
         [HttpGet("test")]
         public string Test() => "Ok";
+
+        [HttpGet]
+        //[Authorize(Policy = AuthPolicy.ADMINISTRATOR_REQUIRE)]
+        public IEnumerable<Item> GetItems() => _itemService.GetAllItems();
     }
 }

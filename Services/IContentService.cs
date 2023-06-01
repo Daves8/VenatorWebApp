@@ -13,7 +13,8 @@ namespace VenatorWebApp.Services
         Topic GetTopic(int id);
         void Hide(Textual textual);
         void UnHide(Textual textual);
-        void CreateReaction(Textual textual, ReactionType type);
+        void Like(Textual textual, User user);
+        void Dislike(Textual textual, User user);
         void CreateNews(News news);
         void UpdateNews(News news);
         void DeleteNews(News news);

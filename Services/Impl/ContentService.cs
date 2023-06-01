@@ -2,16 +2,18 @@
 using VenatorWebApp.Models;
 using VenatorWebApp.Models.Abstracts;
 using VenatorWebApp.Models.Common;
+using VenatorWebApp.Services.Base;
 using VenatorWebApp.Services.Exceptions;
+using VenatorWebApp.Services.Util;
 
 namespace VenatorWebApp.Services.Impl
 {
-    public class ContentService : IContentService
+    public class ContentService : BaseService, IContentService
     {
         private readonly IContentDao _contentDao;
         private readonly ILogger<ContentService> _logger;
 
-        public ContentService(IContentDao contentDao, ILogger<ContentService> logger)
+        public ContentService(IContentDao contentDao, IFillModelsService fillModelsService, ILogger<ContentService> logger) : base(fillModelsService)
         {
             _contentDao = contentDao;
             _logger = logger;
@@ -35,8 +37,6 @@ namespace VenatorWebApp.Services.Impl
             _contentDao.CreateNews(news);
         }
 
-        public void CreateReaction(Textual textual, ReactionType type) => _contentDao.CreateReaction(textual, type);
-
         public void CreateTopic(Topic topic)
         {
             if (!topic.IsValid())
@@ -52,17 +52,182 @@ namespace VenatorWebApp.Services.Impl
 
         public void DeleteTopic(Topic topic) => _contentDao.DeleteTopic(topic);
 
-        public IEnumerable<Comment> GetAllComments(Textual parent) => _contentDao.QueryAllComments(parent);
+        public void Dislike(Textual textual, User user)
+        {
+            bool isLikeExists = _contentDao.CheckReaction(textual, user, ReactionType.Like);
+            bool isDislikeExists = _contentDao.CheckReaction(textual, user, ReactionType.Dislike);
 
-        public IEnumerable<News> GetAllNews() => _contentDao.QueryAllNews();
+            if (isLikeExists)
+            {
+                switch (textual)
+                {
+                    case Comment:
+                        var queriedComment = _contentDao.QueryComment(textual.Id);
+                        queriedComment.LikesCount -= 1;
+                        queriedComment.DislikesCount += 1;
+                        _contentDao.UpdateComment(queriedComment);
+                        break;
+                    case News:
+                        var queriedNews = _contentDao.QueryNews(textual.Id);
+                        queriedNews.LikesCount -= 1;
+                        queriedNews.DislikesCount += 1;
+                        _contentDao.UpdateNews(queriedNews);
+                        break;
+                    case Topic:
+                        var queriedTopic = _contentDao.QueryTopic(textual.Id);
+                        queriedTopic.LikesCount -= 1;
+                        queriedTopic.DislikesCount += 1;
+                        _contentDao.UpdateTopic(queriedTopic);
+                        break;
+                    default:
+                        throw new ArgumentException();
+                }
+                _contentDao.ModifyReaction(textual, user, ReactionType.Dislike);
+            }
+            else if (!isDislikeExists)
+            {
+                switch (textual)
+                {
+                    case Comment:
+                        var queriedComment = _contentDao.QueryComment(textual.Id);
+                        queriedComment.DislikesCount += 1;
+                        _contentDao.UpdateComment(queriedComment);
+                        break;
+                    case News:
+                        var queriedNews = _contentDao.QueryNews(textual.Id);
+                        queriedNews.DislikesCount += 1;
+                        _contentDao.UpdateNews(queriedNews);
+                        break;
+                    case Topic:
+                        var queriedTopic = _contentDao.QueryTopic(textual.Id);
+                        queriedTopic.DislikesCount += 1;
+                        _contentDao.UpdateTopic(queriedTopic);
+                        break;
+                    default:
+                        throw new ArgumentException();
+                }
+                _contentDao.CreateReaction(textual, user, ReactionType.Dislike);
+            }
+            else
+            {
+                switch (textual)
+                {
+                    case Comment:
+                        var queriedComment = _contentDao.QueryComment(textual.Id);
+                        queriedComment.DislikesCount -= 1;
+                        _contentDao.UpdateComment(queriedComment);
+                        break;
+                    case News:
+                        var queriedNews = _contentDao.QueryNews(textual.Id);
+                        queriedNews.DislikesCount -= 1;
+                        _contentDao.UpdateNews(queriedNews);
+                        break;
+                    case Topic:
+                        var queriedTopic = _contentDao.QueryTopic(textual.Id);
+                        queriedTopic.DislikesCount -= 1;
+                        _contentDao.UpdateTopic(queriedTopic);
+                        break;
+                    default:
+                        throw new ArgumentException();
+                }
+                _contentDao.DeleteReaction(textual, user);
+            }
 
-        public IEnumerable<Topic> GetAllTopics() => _contentDao.QueryAllTopics();
+        }
 
-        public News GetNews(int id) => _contentDao.QueryNews(id);
+        public IEnumerable<Comment> GetAllComments(Textual parent) => _contentDao.QueryAllComments(parent).ToList().Select(o => { return Fill(o); });
 
-        public Topic GetTopic(int id) => _contentDao.QueryTopic(id);
+        public IEnumerable<News> GetAllNews() => _contentDao.QueryAllNews().ToList().Select(o => { return Fill(o); });
+
+        public IEnumerable<Topic> GetAllTopics() => _contentDao.QueryAllTopics().ToList().Select(o => { return Fill(o); });
+
+        public News GetNews(int id) => Fill(_contentDao.QueryNews(id));
+
+        public Topic GetTopic(int id) => Fill(_contentDao.QueryTopic(id));
 
         public void Hide(Textual textual) => ChangeVisibility(textual, true);
+
+        public void Like(Textual textual, User user)
+        {
+            bool isLikeExists = _contentDao.CheckReaction(textual, user, ReactionType.Like);
+            bool isDislikeExists = _contentDao.CheckReaction(textual, user, ReactionType.Dislike);
+
+            if (isDislikeExists)
+            {
+                switch (textual)
+                {
+                    case Comment:
+                        var queriedComment = _contentDao.QueryComment(textual.Id);
+                        queriedComment.LikesCount += 1;
+                        queriedComment.DislikesCount -= 1;
+                        _contentDao.UpdateComment(queriedComment);
+                        break;
+                    case News:
+                        var queriedNews = _contentDao.QueryNews(textual.Id);
+                        queriedNews.LikesCount += 1;
+                        queriedNews.DislikesCount -= 1;
+                        _contentDao.UpdateNews(queriedNews);
+                        break;
+                    case Topic:
+                        var queriedTopic = _contentDao.QueryTopic(textual.Id);
+                        queriedTopic.LikesCount += 1;
+                        queriedTopic.DislikesCount -= 1;
+                        _contentDao.UpdateTopic(queriedTopic);
+                        break;
+                    default:
+                        throw new ArgumentException();
+                }
+                _contentDao.ModifyReaction(textual, user, ReactionType.Like);
+            }
+            else if (!isLikeExists)
+            {
+                switch (textual)
+                {
+                    case Comment:
+                        var queriedComment = _contentDao.QueryComment(textual.Id);
+                        queriedComment.LikesCount += 1;
+                        _contentDao.UpdateComment(queriedComment);
+                        break;
+                    case News:
+                        var queriedNews = _contentDao.QueryNews(textual.Id);
+                        queriedNews.LikesCount += 1;
+                        _contentDao.UpdateNews(queriedNews);
+                        break;
+                    case Topic:
+                        var queriedTopic = _contentDao.QueryTopic(textual.Id);
+                        queriedTopic.LikesCount += 1;
+                        _contentDao.UpdateTopic(queriedTopic);
+                        break;
+                    default:
+                        throw new ArgumentException();
+                }
+                _contentDao.CreateReaction(textual, user, ReactionType.Like);
+            }
+            else
+            {
+                switch (textual)
+                {
+                    case Comment:
+                        var queriedComment = _contentDao.QueryComment(textual.Id);
+                        queriedComment.LikesCount -= 1;
+                        _contentDao.UpdateComment(queriedComment);
+                        break;
+                    case News:
+                        var queriedNews = _contentDao.QueryNews(textual.Id);
+                        queriedNews.LikesCount -= 1;
+                        _contentDao.UpdateNews(queriedNews);
+                        break;
+                    case Topic:
+                        var queriedTopic = _contentDao.QueryTopic(textual.Id);
+                        queriedTopic.LikesCount -= 1;
+                        _contentDao.UpdateTopic(queriedTopic);
+                        break;
+                    default:
+                        throw new ArgumentException();
+                }
+                _contentDao.DeleteReaction(textual, user);
+            }
+        }
 
         public void UnHide(Textual textual) => ChangeVisibility(textual, false);
 
