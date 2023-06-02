@@ -32,8 +32,6 @@ namespace VenatorWebApp.DAL.Impl
 
         public IEnumerable<Message> QueryMessagesBetweenUsers(User user1, User user2)
         {
-            // select * from messages where (from_user_id = @USER_ONE_ID and to_user_id = @USER_TWO_ID)
-            // or (from_user_id = @USER_TWO_ID and to_user_id = @USER_ONE_ID) order by creation_date (descending)
             using var connection = GetConnection();
             return connection.Query<Message>("DBO.QUERY_MESSAGES_BETWEEN_USERS",
                 new { USER_ONE_ID = user1.Id, USER_TWO_ID = user2.Id }, commandType: System.Data.CommandType.StoredProcedure);
@@ -52,7 +50,6 @@ namespace VenatorWebApp.DAL.Impl
 
         public IEnumerable<Message> QueryMessagesWithUser(User user)
         {
-            // select * from messages where (from_user_id = @USER_ID or to_user_id = @USER_ID)
             using var connection = GetConnection();
             return connection.Query<Message>("DBO.QUERY_MESSAGES_WITH_USER", new { USER_ID = user.Id }, commandType: System.Data.CommandType.StoredProcedure);
         }
@@ -67,7 +64,7 @@ namespace VenatorWebApp.DAL.Impl
                 FROM_USER_ID = message.Owner.Id,
                 TO_USER_ID = message.ToUser.Id,
                 PARENT_MESSAGE_ID = message.Parent.Id,
-                IS_HIDDEN = 0
+                IS_HIDDEN = message.IsHidden
             };
             connection.Execute("DBO.UPDATE_MESSAGE", parameters, commandType: System.Data.CommandType.StoredProcedure);
         }

@@ -61,7 +61,7 @@ namespace VenatorWebApp.DAL.Impl
         public Statistics QueryUserStatistics(User user)
         {
             using var connection = GetConnection();
-            return connection.QueryFirstOrDefault<Statistics>("DBO.QUERY_USER_STATISTICS", new { ID = user.Id }, commandType: System.Data.CommandType.StoredProcedure);
+            return connection.QueryFirstOrDefault<Statistics>("DBO.QUERY_USER_STATISTICS", new { USER_ID = user.Id }, commandType: System.Data.CommandType.StoredProcedure);
         }
 
         public void UpdateUser(User user)

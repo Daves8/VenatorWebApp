@@ -53,7 +53,7 @@ namespace VenatorWebApp.DAL.Impl
         public void DeleteItemInUser(Item item, User user, ItemIn itemIn)
         {
             using var connection = GetConnection();
-            var parameters = new // УДАЛИТЬ НАДО ТОЛЬКО ОДНО!!!
+            var parameters = new
             {
                 USER_ID = user.Id,
                 ITEM_ID = item.Id,
@@ -65,7 +65,7 @@ namespace VenatorWebApp.DAL.Impl
         public void ModifyItemInUser(Item item, User user, ItemIn itemIn)
         {
             using var connection = GetConnection();
-            var parameters = new // МОДИФИЦИРОВАТЬ НАДО ТОЛЬКО ОДНО
+            var parameters = new
             {
                 USER_ID = user.Id,
                 ITEM_ID = item.Id,
