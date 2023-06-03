@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using VenatorWebApp.Models;
 using VenatorWebApp.Services;
 
 namespace VenatorWebApp.Controllers
@@ -16,5 +17,18 @@ namespace VenatorWebApp.Controllers
 
         [HttpGet("test")]
         public string Test() => "Ok";
+
+        [HttpPost("comm")]
+        public void Comm(Comment comment)
+        {
+            _contentService.CreateComment(comment);
+        }
+
+        [HttpPost("getco")]
+        public IEnumerable<Comment> GetComm(Models.Abstracts.Textual parent)
+        {
+            return _contentService.GetAllComments(parent);
+        }
+
     }
 }

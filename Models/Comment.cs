@@ -8,7 +8,7 @@ namespace VenatorWebApp.Models
         //TODO: rework
         public TextualType ParentType { get; set; }
         //TODO: rework
-        public int ParentTypeId { get; set; }
+        public int ParentId { get; set; }
 
         public override bool IsValid() => !string.IsNullOrEmpty(Text);
     }

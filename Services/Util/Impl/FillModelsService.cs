@@ -68,8 +68,8 @@ namespace VenatorWebApp.Services.Util.Impl
         {
             comment.Parent = comment.ParentType switch
             {
-                Models.Common.TextualType.News => _contentDao.QueryNews(comment.ParentTypeId),
-                Models.Common.TextualType.Topic => _contentDao.QueryTopic(comment.ParentTypeId),
+                Models.Common.TextualType.News => _contentDao.QueryNews(comment.ParentId),
+                Models.Common.TextualType.Topic => _contentDao.QueryTopic(comment.ParentId),
                 _ => throw new ArgumentException(),
             };
             comment.Owner = _userDao.QueryUser(comment.OwnerId);

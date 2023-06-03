@@ -34,7 +34,9 @@ namespace VenatorWebApp.DAL.Impl
             var parameters = new
             {
                 TEXT = comment.Text,
-                PARENT_TYPE_ID = TextualTypeConvertion.GetTextualType(comment.Parent),
+                PARENT_TYPE_ID = comment.ParentType,
+                //TODO: add support
+                //PARENT_TYPE_ID = TextualTypeConvertion.GetTextualType(comment.Parent),
                 PARENT_ID = comment.Parent.Id,
                 USER_ID = comment.Owner.Id,
                 LIKES_COUNT = 0,
@@ -167,7 +169,9 @@ namespace VenatorWebApp.DAL.Impl
             {
                 ID = comment.Id,
                 TEXT = comment.Text,
-                PARENT_TYPE_ID = TextualTypeConvertion.GetTextualType(comment.Parent),
+                PARENT_TYPE_ID = comment.ParentType,
+                //TODO: add support
+                //PARENT_TYPE_ID = TextualTypeConvertion.GetTextualType(comment.Parent),
                 PARENT_ID = comment.Parent.Id,
                 USER_ID = comment.Owner.Id,
                 LIKES_COUNT = comment.LikesCount,

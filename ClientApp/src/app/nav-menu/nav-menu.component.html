@@ -13,22 +13,42 @@
         <span class="navbar-toggler-icon"></span>
       </button>
 
-      <div class="navbar-collapse collapse d-sm-inline-flex justify-content-end"
+      <div class="navbar-collapse collapse d-sm-inline-flex justify-content-end" style="font-size: 1.25rem;"
            [ngClass]="{ show: isExpanded }">
         <ul class="navbar-nav flex-grow">
 
-          <li *ngIf="!isAuthorized" class="nav-item" [routerLinkActive]="['link-active']">
+          <li class="nav-item" [routerLinkActive]="['link-active']" style="margin-right: 2rem;">
+            <a class="nav-link text-dark" [routerLink]="['/store']">Магазин</a>
+          </li>
+          <li class="nav-item" [routerLinkActive]="['link-active']" style="margin-right: 2rem;">
+            <a class="nav-link text-dark" [routerLink]="['/news']">Новини</a>
+          </li>
+          <li class="nav-item" [routerLinkActive]="['link-active']" style="margin-right: 2rem;">
+            <a class="nav-link text-dark" [routerLink]="['/forum']">Форум</a>
+          </li>
+
+          <li *ngIf="isAuthorized" class="nav-item" [routerLinkActive]="['link-active']" style="margin-right: 2rem;">
+            <a class="nav-link text-dark" [routerLink]="['/message']">Повідомлення</a>
+          </li>
+          <li *ngIf="isAuthorized" class="nav-item" [routerLinkActive]="['link-active']" style="margin-right: 2rem;">
+            <a class="nav-link text-dark" [routerLink]="['/recommendations']">Рекомендації</a>
+          </li>
+          <li *ngIf="isAuthorized" class="nav-item" [routerLinkActive]="['link-active']" style="margin-right: 2rem;">
+            <a class="nav-link text-dark" [routerLink]="['/cart']">Кошик</a>
+          </li>
+
+          <li *ngIf="!isAuthorized" class="nav-item" [routerLinkActive]="['link-active']" style="margin-right: 2rem;">
             <a class="nav-link text-dark" [routerLink]="['/login']">Вхід</a>
           </li>
-          <li *ngIf="!isAuthorized" class="nav-item" [routerLinkActive]="['link-active']">
+          <li *ngIf="!isAuthorized" class="nav-item" [routerLinkActive]="['link-active']" style="margin-right: 2rem;">
             <a class="nav-link text-dark" [routerLink]="['/registration']">Реєстрація</a>
           </li>
 
-          <li *ngIf="isAuthorized">
-            <a class="nav-link text-dark">{{username}}</a>
+          <li *ngIf="isAuthorized" class="nav-item" [routerLinkActive]="['link-active']" style="margin-right: 2rem;">
+            <a class="nav-link text-dark" [routerLink]="['/profile']">{{username}}</a>
           </li>
           <li *ngIf="isAuthorized">
-              <button type="button" class="btn btn-light" (click)="logout()">Вийти</button>
+            <button type="button" class="btn btn-light" (click)="logout()" style="font-size: 1.25rem;">Вийти</button>
           </li>
 
         </ul>

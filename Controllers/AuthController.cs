@@ -25,5 +25,13 @@ namespace VenatorWebApp.Controllers
             Response.Headers.Add("Authorization", "Bearer " + result.token);
             return result.user;
         }
+
+        [HttpPost("registration")]
+        public User Registration(User user)
+        {
+            var result = _authService.Register(user);
+            Response.Headers.Add("Authorization", "Bearer " + result.token);
+            return result.user;
+        }
     }
 }

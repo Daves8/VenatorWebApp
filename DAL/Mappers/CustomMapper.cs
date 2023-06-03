@@ -131,7 +131,7 @@ namespace VenatorWebApp.DAL.Mapper
                     "ID" => type.GetProperty("Id"),
                     "TEXT" => type.GetProperty("Text"),
                     "PARENT_TYPE_ID" => type.GetProperty("ParentType"),
-                    "PARENT_ID" => type.GetProperty("ParentTypeId"),
+                    "PARENT_ID" => type.GetProperty("ParentId"),
                     "USER_ID" => type.GetProperty("OwnerId"),
                     "LIKES_COUNT" => type.GetProperty("LikesCount"),
                     "DISLIKES_COUNT" => type.GetProperty("DislikesCount"),

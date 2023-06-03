@@ -3,6 +3,14 @@
   "page_names": {
     "home": "Домашня сторінка",
     "login": "Вхід",
-    "registration": "Реєстрація"
+    "registration": "Реєстрація",
+    "profile": "Профіль",
+    "store": "Магазин",
+    "item": "Предмет",
+    "news": "Новини",
+    "forum": "Форум",
+    "message": "Повідомлення",
+    "cart": "Кошик",
+    "recommendations": "Рекомендації"
   }
 }

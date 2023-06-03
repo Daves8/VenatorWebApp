@@ -1,9 +1,9 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
-import { Observable } from 'rxjs';
-import { getBaseUrl } from '../../main';
 import { User } from '../model/user';
+import { AuthService } from '../service/auth.service';
+import { HashService } from '../service/hash.service';
 import { StorageService } from '../service/storage.service';
 
 @Component({
@@ -16,22 +16,21 @@ export class RegistrationComponent implements OnInit {
   user: User = new User();
   error: string = '';
 
-  constructor(private http: HttpClient, private storageService: StorageService) { }
+  constructor(private authService: AuthService, private storageService: StorageService, private hashService: HashService) { }
 
   ngOnInit(): void { }
 
   onSubmit(form: NgForm) {
-    this.registration(this.user).subscribe(
-      (response: any) => {
-        this.storageService.processLogin(response.user, response.token);
+    const copiedUser: User = { ...this.user };
+    copiedUser.password = this.hashService.hashPassword(copiedUser.password);
+    this.authService.registration(copiedUser).subscribe(
+      (response: HttpResponse<any>) => {
+        const token = response.headers.get('Authorization')!;
+        this.storageService.processLogin(response.body, token);
       },
       error => {
         this.error = error.error;
       }
     );
-  }
-
-  registration(user: User): Observable<any> {
-    return this.http.post(getBaseUrl() + 'auth/registration', user);
   }
 }

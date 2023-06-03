@@ -18,7 +18,7 @@ namespace VenatorWebApp.DAL.Impl
                 TEXT = message.Text,
                 FROM_USER_ID = message.Owner.Id,
                 TO_USER_ID = message.ToUser.Id,
-                PARENT_MESSAGE_ID = message.Parent.Id,
+                PARENT_MESSAGE_ID = message.Parent?.Id,
                 IS_HIDDEN = message.IsHidden
             };
             connection.Execute("DBO.CREATE_MESSAGE", parameters, commandType: System.Data.CommandType.StoredProcedure);
@@ -63,7 +63,7 @@ namespace VenatorWebApp.DAL.Impl
                 TEXT = message.Text,
                 FROM_USER_ID = message.Owner.Id,
                 TO_USER_ID = message.ToUser.Id,
-                PARENT_MESSAGE_ID = message.Parent.Id,
+                PARENT_MESSAGE_ID = message.Parent?.Id,
                 IS_HIDDEN = message.IsHidden
             };
             connection.Execute("DBO.UPDATE_MESSAGE", parameters, commandType: System.Data.CommandType.StoredProcedure);
