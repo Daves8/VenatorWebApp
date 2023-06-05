@@ -19,6 +19,10 @@ export class StorageService {
 
   //checkToken(): boolean { }
 
+  isAuthorized(): boolean {
+    return this.isLogged.getValue();
+  }
+
   processLogin(user: User, token: string): void {
     if (token && token.trim() !== '') localStorage.setItem('token', token);
     if (user.id != null && user.id !== 0) localStorage.setItem('user_id', user.id.toString());

@@ -8,7 +8,7 @@ namespace VenatorWebApp.Models
 
         public override string? ToString()
         {
-            return base.ToString() + $", Password={Password}";
+            return base.ToString() + $", Password={!string.IsNullOrEmpty(Password)}";
         }
 
         public override bool IsValid() => !string.IsNullOrEmpty(Name) && !string.IsNullOrEmpty(Password);

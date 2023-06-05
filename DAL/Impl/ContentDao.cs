@@ -23,6 +23,7 @@ namespace VenatorWebApp.DAL.Impl
             {
                 REACTION_TYPE = type,
                 TEXTUAL_ID = textual.Id,
+                TEXTUAL_TYPE = TextualTypeConvertion.GetTextualType(textual),
                 USER_ID = user.Id
             };
             return connection.QueryFirstOrDefault<bool>("DBO.CHECK_REACTION_EXISTENCE", parameters, commandType: System.Data.CommandType.StoredProcedure);
@@ -69,6 +70,7 @@ namespace VenatorWebApp.DAL.Impl
             {
                 REACTION_TYPE = type,
                 TEXTUAL_ID = textual.Id,
+                TEXTUAL_TYPE = TextualTypeConvertion.GetTextualType(textual),
                 USER_ID = user.Id,
             };
             connection.Execute("DBO.CREATE_REACTION", parameters, commandType: System.Data.CommandType.StoredProcedure);
@@ -105,7 +107,9 @@ namespace VenatorWebApp.DAL.Impl
         public void DeleteReaction(Textual textual, User user)
         {
             using var connection = GetConnection();
-            connection.Execute("DBO.DELETE_REACTION", new { TEXTUAL_ID = textual.Id, USER_ID = user.Id }, commandType: System.Data.CommandType.StoredProcedure);
+            connection.Execute("DBO.DELETE_REACTION",
+                new { TEXTUAL_ID = textual.Id, TEXTUAL_TYPE = TextualTypeConvertion.GetTextualType(textual), USER_ID = user.Id },
+                commandType: System.Data.CommandType.StoredProcedure);
         }
 
         public void DeleteTopic(Topic topic)
@@ -121,6 +125,7 @@ namespace VenatorWebApp.DAL.Impl
             {
                 REACTION_TYPE = type,
                 TEXTUAL_ID = textual.Id,
+                TEXTUAL_TYPE = TextualTypeConvertion.GetTextualType(textual),
                 USER_ID = user.Id,
             };
             connection.Execute("DBO.UPDATE_REACTION", parameters, commandType: System.Data.CommandType.StoredProcedure);

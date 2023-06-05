@@ -14,6 +14,7 @@ namespace VenatorWebApp.Services.Base
 
         protected T Fill<T>(T entity) where T : BaseEntity
         {
+            if (entity == null) { return null; }
             _fillModelsService.Fill(entity);
             return entity;
         }

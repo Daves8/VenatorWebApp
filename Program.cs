@@ -35,6 +35,8 @@ builder.Services.AddSingleton<IMessageDao, MessageDao>();
 // Util
 builder.Services.AddSingleton<IFillModelsService, FillModelsService>();
 
+builder.Services.AddHttpContextAccessor();
+
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
     {

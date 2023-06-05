@@ -11,12 +11,15 @@ namespace VenatorWebApp.Services.Impl
     public class ContentService : BaseService, IContentService
     {
         private readonly IContentDao _contentDao;
+        private readonly IAuthService _authService;
         private readonly ILogger<ContentService> _logger;
 
-        public ContentService(IContentDao contentDao, IFillModelsService fillModelsService, ILogger<ContentService> logger) : base(fillModelsService)
+        public ContentService(IContentDao contentDao, IAuthService authService, IFillModelsService fillModelsService, ILogger<ContentService> logger) : base(fillModelsService)
         {
             _contentDao = contentDao;
+            _authService = authService;
             _logger = logger;
+            _authService = authService;
         }
 
         public void CreateComment(Comment comment)
@@ -25,6 +28,7 @@ namespace VenatorWebApp.Services.Impl
             {
                 throw new HttpResponseException("Коментар пустий або перевищує максимальну довжину");
             }
+            comment.Owner = _authService.GetCurrentUser();
             _contentDao.CreateComment(comment);
         }
 
@@ -34,6 +38,7 @@ namespace VenatorWebApp.Services.Impl
             {
                 throw new HttpResponseException("Новина пуста або перевищує максимальну довжину");
             }
+            news.Owner = _authService.GetCurrentUser();
             _contentDao.CreateNews(news);
         }
 
@@ -43,6 +48,7 @@ namespace VenatorWebApp.Services.Impl
             {
                 throw new HttpResponseException("Запис пустий або перевищує максимальну довжину");
             }
+            topic.Owner = _authService.GetCurrentUser();
             _contentDao.CreateTopic(topic);
         }
 
@@ -52,8 +58,10 @@ namespace VenatorWebApp.Services.Impl
 
         public void DeleteTopic(Topic topic) => _contentDao.DeleteTopic(topic);
 
-        public void Dislike(Textual textual, User user)
+        public void Dislike(Textual textual)
         {
+            var user = _authService.GetCurrentUser();
+
             bool isLikeExists = _contentDao.CheckReaction(textual, user, ReactionType.Like);
             bool isDislikeExists = _contentDao.CheckReaction(textual, user, ReactionType.Dislike);
 
@@ -62,19 +70,19 @@ namespace VenatorWebApp.Services.Impl
                 switch (textual)
                 {
                     case Comment:
-                        var queriedComment = _contentDao.QueryComment(textual.Id);
+                        var queriedComment = GetComment(textual.Id);
                         queriedComment.LikesCount -= 1;
                         queriedComment.DislikesCount += 1;
                         _contentDao.UpdateComment(queriedComment);
                         break;
                     case News:
-                        var queriedNews = _contentDao.QueryNews(textual.Id);
+                        var queriedNews = GetNews(textual.Id);
                         queriedNews.LikesCount -= 1;
                         queriedNews.DislikesCount += 1;
                         _contentDao.UpdateNews(queriedNews);
                         break;
                     case Topic:
-                        var queriedTopic = _contentDao.QueryTopic(textual.Id);
+                        var queriedTopic = GetTopic(textual.Id);
                         queriedTopic.LikesCount -= 1;
                         queriedTopic.DislikesCount += 1;
                         _contentDao.UpdateTopic(queriedTopic);
@@ -89,17 +97,17 @@ namespace VenatorWebApp.Services.Impl
                 switch (textual)
                 {
                     case Comment:
-                        var queriedComment = _contentDao.QueryComment(textual.Id);
+                        var queriedComment = GetComment(textual.Id);
                         queriedComment.DislikesCount += 1;
                         _contentDao.UpdateComment(queriedComment);
                         break;
                     case News:
-                        var queriedNews = _contentDao.QueryNews(textual.Id);
+                        var queriedNews = GetNews(textual.Id);
                         queriedNews.DislikesCount += 1;
                         _contentDao.UpdateNews(queriedNews);
                         break;
                     case Topic:
-                        var queriedTopic = _contentDao.QueryTopic(textual.Id);
+                        var queriedTopic = GetTopic(textual.Id);
                         queriedTopic.DislikesCount += 1;
                         _contentDao.UpdateTopic(queriedTopic);
                         break;
@@ -113,17 +121,17 @@ namespace VenatorWebApp.Services.Impl
                 switch (textual)
                 {
                     case Comment:
-                        var queriedComment = _contentDao.QueryComment(textual.Id);
+                        var queriedComment = GetComment(textual.Id);
                         queriedComment.DislikesCount -= 1;
                         _contentDao.UpdateComment(queriedComment);
                         break;
                     case News:
-                        var queriedNews = _contentDao.QueryNews(textual.Id);
+                        var queriedNews = GetNews(textual.Id);
                         queriedNews.DislikesCount -= 1;
                         _contentDao.UpdateNews(queriedNews);
                         break;
                     case Topic:
-                        var queriedTopic = _contentDao.QueryTopic(textual.Id);
+                        var queriedTopic = GetTopic(textual.Id);
                         queriedTopic.DislikesCount -= 1;
                         _contentDao.UpdateTopic(queriedTopic);
                         break;
@@ -132,23 +140,86 @@ namespace VenatorWebApp.Services.Impl
                 }
                 _contentDao.DeleteReaction(textual, user);
             }
-
         }
 
-        public IEnumerable<Comment> GetAllComments(Textual parent) => _contentDao.QueryAllComments(parent).ToList().Select(o => { return Fill(o); });
+        public IEnumerable<Comment> GetAllComments(Textual parent)
+        {
+            var allComments = _contentDao.QueryAllComments(parent).ToList().Select(o => { return Fill(o); });
+            return FillTextualByUser(allComments);
+        }
 
-        public IEnumerable<News> GetAllNews() => _contentDao.QueryAllNews().ToList().Select(o => { return Fill(o); });
+        public IEnumerable<Comment> GetAllComments(Textual parent, bool isHidden)
+        {
+            var allComments = _contentDao.QueryAllComments(parent).Where(o => o.IsHidden == isHidden).ToList().Select(o => { return Fill(o); });
+            return FillTextualByUser(allComments);
+        }
 
-        public IEnumerable<Topic> GetAllTopics() => _contentDao.QueryAllTopics().ToList().Select(o => { return Fill(o); });
+        public IEnumerable<News> GetAllNews()
+        {
+            var allNews = _contentDao.QueryAllNews().ToList().Select(o => { return Fill(o); });
+            return FillTextualByUser(allNews);
+        }
 
-        public News GetNews(int id) => Fill(_contentDao.QueryNews(id));
+        public IEnumerable<News> GetAllNews(bool isHidden)
+        {
+            var allNews = _contentDao.QueryAllNews().Where(o => o.IsHidden == isHidden).ToList().Select(o => { return Fill(o); });
+            return FillTextualByUser(allNews);
+        }
 
-        public Topic GetTopic(int id) => Fill(_contentDao.QueryTopic(id));
+        public IEnumerable<Topic> GetAllTopics()
+        {
+            var allTopicss = _contentDao.QueryAllTopics().ToList().Select(o => { return Fill(o); });
+            return FillTextualByUser(allTopicss);
+        }
+
+        public IEnumerable<Topic> GetAllTopics(bool isHidden)
+        {
+            var allTopics = _contentDao.QueryAllTopics().Where(o => o.IsHidden == isHidden).ToList().Select(o => { return Fill(o); });
+            return FillTextualByUser(allTopics);
+        }
+
+        public Comment GetComment(int id)
+        {
+            var comment = _contentDao.QueryComment(id);
+
+            if (comment != null && comment.IsHidden && _authService.GetUserRole() == Role.User)
+            {
+                throw new HttpResponseException("Не має доступу", 401);
+            }
+
+            return FillTextualByUser(Fill(comment));
+        }
+
+        public News GetNews(int id)
+        {
+            var news = _contentDao.QueryNews(id);
+
+            if (news != null && news.IsHidden && _authService.GetUserRole() == Role.User)
+            {
+                throw new HttpResponseException("Не має доступу", 401);
+            }
+
+            return FillTextualByUser(Fill(news));
+        }
+
+        public Topic GetTopic(int id)
+        {
+            var topic = _contentDao.QueryTopic(id);
+
+            if (topic != null && topic.IsHidden && _authService.GetUserRole() == Role.User)
+            {
+                throw new HttpResponseException("Не має доступу", 401);
+            }
+
+            return FillTextualByUser(Fill(topic));
+        }
 
         public void Hide(Textual textual) => ChangeVisibility(textual, true);
 
-        public void Like(Textual textual, User user)
+        public void Like(Textual textual)
         {
+            var user = _authService.GetCurrentUser();
+
             bool isLikeExists = _contentDao.CheckReaction(textual, user, ReactionType.Like);
             bool isDislikeExists = _contentDao.CheckReaction(textual, user, ReactionType.Dislike);
 
@@ -157,19 +228,19 @@ namespace VenatorWebApp.Services.Impl
                 switch (textual)
                 {
                     case Comment:
-                        var queriedComment = _contentDao.QueryComment(textual.Id);
+                        var queriedComment = GetComment(textual.Id);
                         queriedComment.LikesCount += 1;
                         queriedComment.DislikesCount -= 1;
                         _contentDao.UpdateComment(queriedComment);
                         break;
                     case News:
-                        var queriedNews = _contentDao.QueryNews(textual.Id);
+                        var queriedNews = GetNews(textual.Id);
                         queriedNews.LikesCount += 1;
                         queriedNews.DislikesCount -= 1;
                         _contentDao.UpdateNews(queriedNews);
                         break;
                     case Topic:
-                        var queriedTopic = _contentDao.QueryTopic(textual.Id);
+                        var queriedTopic = GetTopic(textual.Id);
                         queriedTopic.LikesCount += 1;
                         queriedTopic.DislikesCount -= 1;
                         _contentDao.UpdateTopic(queriedTopic);
@@ -184,17 +255,17 @@ namespace VenatorWebApp.Services.Impl
                 switch (textual)
                 {
                     case Comment:
-                        var queriedComment = _contentDao.QueryComment(textual.Id);
+                        var queriedComment = GetComment(textual.Id);
                         queriedComment.LikesCount += 1;
                         _contentDao.UpdateComment(queriedComment);
                         break;
                     case News:
-                        var queriedNews = _contentDao.QueryNews(textual.Id);
+                        var queriedNews = GetNews(textual.Id);
                         queriedNews.LikesCount += 1;
                         _contentDao.UpdateNews(queriedNews);
                         break;
                     case Topic:
-                        var queriedTopic = _contentDao.QueryTopic(textual.Id);
+                        var queriedTopic = GetTopic(textual.Id);
                         queriedTopic.LikesCount += 1;
                         _contentDao.UpdateTopic(queriedTopic);
                         break;
@@ -208,17 +279,17 @@ namespace VenatorWebApp.Services.Impl
                 switch (textual)
                 {
                     case Comment:
-                        var queriedComment = _contentDao.QueryComment(textual.Id);
+                        var queriedComment = GetComment(textual.Id);
                         queriedComment.LikesCount -= 1;
                         _contentDao.UpdateComment(queriedComment);
                         break;
                     case News:
-                        var queriedNews = _contentDao.QueryNews(textual.Id);
+                        var queriedNews = GetNews(textual.Id);
                         queriedNews.LikesCount -= 1;
                         _contentDao.UpdateNews(queriedNews);
                         break;
                     case Topic:
-                        var queriedTopic = _contentDao.QueryTopic(textual.Id);
+                        var queriedTopic = GetTopic(textual.Id);
                         queriedTopic.LikesCount -= 1;
                         _contentDao.UpdateTopic(queriedTopic);
                         break;
@@ -242,23 +313,49 @@ namespace VenatorWebApp.Services.Impl
             switch (textual)
             {
                 case Comment comment:
-                    var queriedComment = _contentDao.QueryComment(textual.Id);
+                    var queriedComment = GetComment(textual.Id);
                     queriedComment.IsHidden = value;
                     _contentDao.UpdateComment(queriedComment);
                     break;
                 case News news:
-                    var queriedNews = _contentDao.QueryNews(textual.Id);
+                    var queriedNews = GetNews(textual.Id);
                     queriedNews.IsHidden = value;
                     _contentDao.UpdateNews(queriedNews);
                     break;
                 case Topic topic:
-                    var queriedTopic = _contentDao.QueryTopic(textual.Id);
+                    var queriedTopic = GetTopic(textual.Id);
                     queriedTopic.IsHidden = value;
                     _contentDao.UpdateTopic(queriedTopic);
                     break;
                 default:
                     throw new ArgumentException();
             }
+        }
+
+        protected IEnumerable<T> FillTextualByUser<T>(IEnumerable<T> textuals) where T : Textual
+        {
+            var currentUser = _authService.GetCurrentUser();
+
+            if (currentUser != null)
+            {
+                textuals.ToList().ForEach(t => t.CurrentLike = _contentDao.CheckReaction(t, currentUser, ReactionType.Like));
+                textuals.ToList().ForEach(t => t.CurrentDislike = _contentDao.CheckReaction(t, currentUser, ReactionType.Dislike));
+            }
+
+            return textuals;
+        }
+
+        protected T FillTextualByUser<T>(T textual) where T : Textual
+        {
+            var currentUser = _authService.GetCurrentUser();
+
+            if (currentUser != null)
+            {
+                textual.CurrentLike = _contentDao.CheckReaction(textual, currentUser, ReactionType.Like);
+                textual.CurrentDislike = _contentDao.CheckReaction(textual, currentUser, ReactionType.Dislike);
+            }
+
+            return textual;
         }
     }
 }

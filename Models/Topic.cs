@@ -4,6 +4,6 @@ namespace VenatorWebApp.Models
 {
     public class Topic : Textual
     {
-        public override bool IsValid() => !string.IsNullOrEmpty(Text);
+        public override bool IsValid() => !string.IsNullOrEmpty(Name) && !string.IsNullOrEmpty(Text);
     }
 }

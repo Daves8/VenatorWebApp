@@ -4,6 +4,10 @@ namespace VenatorWebApp.Models
 {
     public class News : Textual
     {
-        public override bool IsValid() => !string.IsNullOrEmpty(Text);
+        public News() { }
+
+        public News(int id) : base(id) { }
+
+        public override bool IsValid() => !string.IsNullOrEmpty(Name) && !string.IsNullOrEmpty(Text);
     }
 }

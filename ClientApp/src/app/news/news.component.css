@@ -1,0 +1,13 @@
+
+#title:hover {
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.black-button {
+  color: white;
+}
+
+.white-button {
+  color: black;
+}

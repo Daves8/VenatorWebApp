@@ -1,5 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using VenatorWebApp.Models;
+using VenatorWebApp.Models.Common;
 using VenatorWebApp.Services;
 
 namespace VenatorWebApp.Controllers
@@ -18,17 +20,46 @@ namespace VenatorWebApp.Controllers
         [HttpGet("test")]
         public string Test() => "Ok";
 
-        [HttpPost("comm")]
-        public void Comm(Comment comment)
-        {
-            _contentService.CreateComment(comment);
-        }
+        [HttpPost("create-news")]
+        [Authorize(Policy = AuthPolicy.MODERATOR_REQUIRE)]
+        public void CreateNews(News news) => _contentService.CreateNews(news);
 
-        [HttpPost("getco")]
-        public IEnumerable<Comment> GetComm(Models.Abstracts.Textual parent)
-        {
-            return _contentService.GetAllComments(parent);
-        }
+        [HttpGet("news/{id}")]
+        public News GetNews(int id) => _contentService.GetNews(id);
+
+        [HttpGet("all-news")]
+        [Authorize(Policy = AuthPolicy.MODERATOR_REQUIRE)]
+        public IEnumerable<News> GetAllNews() => _contentService.GetAllNews();
+
+        [HttpGet("not-hidden-news")]
+        public IEnumerable<News> GetAllNotHiddenNews() => _contentService.GetAllNews(false);
+
+        [HttpPost("create-comment-to-news")]
+        [Authorize(Policy = AuthPolicy.MODERATOR_REQUIRE)]
+        public void CreateCommentToNews(Comment comment) => _contentService.CreateComment(comment);
+
+        [HttpGet("all-comments-to-news/{id}")]
+        [Authorize(Policy = AuthPolicy.MODERATOR_REQUIRE)]
+        public IEnumerable<Comment> GetAllCommentsToNews(int id) => _contentService.GetAllComments(new News(id));
+
+        [HttpGet("not-hidden-comments-to-news/{id}")]
+        public IEnumerable<Comment> GetAllNotHiddenCommentsToNews(int id) => _contentService.GetAllComments(new News(id), false);
+
+        [HttpPost("like-news")]
+        [Authorize]
+        public void LikeNews(News news) => _contentService.Like(news);
+
+        [HttpPost("dislike-news")]
+        [Authorize]
+        public void DislikeNews(News news) => _contentService.Dislike(news);
+
+        [HttpPost("like-comment-to-news")]
+        [Authorize]
+        public void LikeCommentToNews(Comment news) => _contentService.Like(news);
+
+        [HttpPost("dislike-comment-to-news")]
+        [Authorize]
+        public void DislikeCommentToNews(Comment news) => _contentService.Dislike(news);
 
     }
 }

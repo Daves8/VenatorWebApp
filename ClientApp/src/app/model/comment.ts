@@ -7,4 +7,6 @@ export class Comment extends Textual {
   parentType!: TextualType;
   likesCount!: number;
   dislikesCount!: number;
+  currentLike!: boolean;
+  currentDislike!: boolean;
 }

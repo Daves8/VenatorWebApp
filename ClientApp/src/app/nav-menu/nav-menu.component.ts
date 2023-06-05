@@ -64,9 +64,9 @@ export class NavMenuComponent {
             this.getNamesConfig().subscribe((config: any) => {
               this.titleService.setTitle(config.site_name + ' – ' + config.page_names.forum);
             }); break;
-          case 'message':
+          case 'messages':
             this.getNamesConfig().subscribe((config: any) => {
-              this.titleService.setTitle(config.site_name + ' – ' + config.page_names.message);
+              this.titleService.setTitle(config.site_name + ' – ' + config.page_names.messages);
             }); break;
 
           case 'cart':
