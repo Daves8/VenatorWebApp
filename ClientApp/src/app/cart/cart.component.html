@@ -1,1 +1,53 @@
-<p>cart works!</p>
+
+<div class="row" style="padding-top: 3rem; padding-bottom: 1rem">
+
+  <div class="col-12"><h2>Кошик</h2></div>
+
+</div>
+
+<div class="row" *ngIf="allItems.length > 0" style="margin-bottom: 1rem;">
+  <div class="col-7">
+    <h4>Внутрішньоігрові предмети: {{ priceAll }} зол.</h4>
+    <h4>В наявності: {{ goldInUser }} зол.</h4>
+  </div>
+
+  <div class="col-5 text-end">
+    <button type="button" (click)="buyItems()" class="btn btn-success" style=" margin-right: 1.5rem;">Придбати все</button>
+    <button type="button" (click)="removeAllItemsFromCart()" class="btn btn-danger" style="margin-right: 13.8rem;">Видалити все</button>
+
+    <div class="fw-normal" style="color: red; font-size: 1.25rem; margin-right: 13.8rem; margin-top: 0.3rem;">{{ error }}</div>
+  </div>
+</div>
+
+
+
+<div class="row" *ngIf="allItems.length > 0">
+  <div class="col-12" style="margin-bottom: 3rem;">
+
+    <div class="row row-cols-auto g-4">
+      <div *ngFor="let item of allItems" class="col">
+        <div class="card h-100" style="width: 15.68rem;">
+          <img [src]="item.imageSafeUrl" style="width: 15.68rem; height: 10rem;" class="card-img-top" alt="{{ item.name }}" title="{{ item.name }}">
+          <div class="card-body">
+            <h5 class="card-title text-center">{{ item.name }}</h5>
+            <p class="card-text fst-italic text-center fs-5">{{ getItemCategoryLabel(item.category) }}</p>
+            <p class="card-text text-break desc fw-lighter">{{ item.description }}</p>
+            <p class="card-text fst-italic fw-lighter fw-bold" style="display: inline-block;">Ціна: {{ item.price }} </p>
+            <button type="button" (click)="handleDeleteFromCartClick(item)" class="btn btn-secondary" style="float: right; ">Видалити</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+
+
+<div class="row" *ngIf="allItems.length == 0">
+  <div class="col-12" style="margin-bottom: 1rem;">
+    <h4 style="display: inline-block; margin-bottom: 1rem;">Кошик пустий</h4>
+  </div>
+</div>
+
+

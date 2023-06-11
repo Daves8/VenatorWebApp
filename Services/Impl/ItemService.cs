@@ -50,7 +50,10 @@ namespace VenatorWebApp.Services.Impl
                     _itemDao.ModifyItemInUser(item, user, ItemIn.Inventory);
                 }
             }
-            throw new HttpResponseException("Недостатньо коштів для покупки");
+            else
+            {
+                throw new HttpResponseException("Недостатньо коштів для покупки");
+            }
         }
 
         public void CreateItem(Item item) => _itemDao.CreateItem(item);

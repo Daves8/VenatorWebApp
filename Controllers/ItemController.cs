@@ -38,6 +38,10 @@ namespace VenatorWebApp.Controllers
         [Authorize]
         public void RemoveAllItemsFromCart() => _itemService.RemoveAllItemsFromCart();
 
+        [HttpGet("remove-item-from-cart/{id}")]
+        [Authorize]
+        public void RemoveItemFromCart(int id) => _itemService.RemoveItemFromCart(new Item(id));
+
         [HttpGet("buy-items-in-cart")]
         [Authorize]
         public void BuyItemsInCart() => _itemService.BuyItemsInCart();

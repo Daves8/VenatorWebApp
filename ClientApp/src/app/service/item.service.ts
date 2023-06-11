@@ -23,6 +23,10 @@ export class ItemService {
     }
   }
 
+  getItemsInCart(): Observable<any> {
+    return this.http.get(getBaseUrl() + 'item/items-in-cart');
+  }
+
   getItemImage(item: Item) {
     const url = getBaseUrl() + "img/item/" + item.category + "" + item.imageUrl;
     return this.http.get(url, { responseType: 'arraybuffer' });
@@ -30,6 +34,22 @@ export class ItemService {
 
   addToCart(item: Item): Observable<any> {
     return this.http.post(getBaseUrl() + 'item/add-to-cart', item);
+  }
+
+  removeItemFromCart(item: Item): Observable<any> {
+    return this.http.get(getBaseUrl() + 'item/remove-item-from-cart/' + item.id);
+  }
+
+  removeAllItemsFromCart(): Observable<any> {
+    return this.http.get(getBaseUrl() + 'item/remove-all-items-from-cart');
+  }
+
+  buyItemsInCart(): Observable<any> {
+    return this.http.get(getBaseUrl() + 'item/buy-items-in-cart');
+  }
+
+  getCurrentUser(): Observable<any> {
+    return this.http.get(getBaseUrl() + 'user/' + this.storageService.getUserId());
   }
 
   getItemCategoryLabel(category: ItemCategory): string {
