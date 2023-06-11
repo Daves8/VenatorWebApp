@@ -54,10 +54,10 @@ export class ContentService {
   }
 
   likeComment(comment: Comment): Observable<any> {
-    return this.http.post(getBaseUrl() + 'content/like-comment-to-news', comment);
+    return this.http.post(getBaseUrl() + 'content/like-comment', comment);
   }
 
   dislikeComment(comment: Comment): Observable<any> {
-    return this.http.post(getBaseUrl() + 'content/dislike-comment-to-news', comment);
+    return this.http.post(getBaseUrl() + 'content/dislike-comment', comment);
   }
 }

@@ -1,1 +1,124 @@
-<p>store works!</p>
+
+<div class="row" style="padding-top: 3rem; padding-bottom: 3rem">
+
+  <div class="col-12"><h2>Внутрішньоігрові предмети</h2></div>
+
+</div>
+
+<div class="row">
+
+
+  <div class="col-2">
+
+    <h4>Фільтри</h4>
+
+    <h5 class="mt-3">Категорії</h5>
+
+
+    <div class="input-group">
+      <span class="input-group-text" style="width: 7rem;">Зброя</span>
+      <div class="input-group-text">
+        <input class="form-check-input mt-0" type="checkbox" [(ngModel)]="isWeapon">
+      </div>
+    </div>
+    <div class="input-group">
+      <span class="input-group-text" style="width: 7rem;">Одяг</span>
+      <div class="input-group-text">
+        <input class="form-check-input mt-0" type="checkbox" [(ngModel)]="isClothes">
+      </div>
+    </div>
+    <div class="input-group">
+      <span class="input-group-text" style="width: 7rem;">Тварини</span>
+      <div class="input-group-text">
+        <input class="form-check-input mt-0" type="checkbox" [(ngModel)]="isAnimals">
+      </div>
+    </div>
+    <div class="input-group">
+      <span class="input-group-text" style="width: 7rem;">Будівля</span>
+      <div class="input-group-text">
+        <input class="form-check-input mt-0" type="checkbox" [(ngModel)]="isBuildings">
+      </div>
+    </div>
+
+
+    <h5 class="mt-3">Ціна</h5>
+
+    <div class="input-group mb-3">
+      <span class="input-group-text" style="width: 5rem;">мін:</span>
+      <input type="number" [(ngModel)]="minPrice" style="max-width: 6rem;" class="form-control" min="0" max="999999">
+    </div>
+    <div class="input-group mb-3">
+      <span class="input-group-text" style="width: 5rem;">макс:</span>
+      <input type="number" [(ngModel)]="maxPrice" style="max-width: 6rem;" class="form-control" max="999999" min="0">
+    </div>
+
+    <button type="button" class="btn btn-secondary" (click)="applyFilter()">Застосувати</button>
+
+  </div>
+
+  <div class="col-10" style="margin-bottom: 3rem;">
+
+
+    <h4 *ngIf="groupedItems[3] && groupedItems[3].length > 0 && isWeapon" style="margin-bottom: 1rem;">Зброя</h4> <!-- weapons -->
+    <div *ngIf="groupedItems[3] && groupedItems[3].length > 0 && isWeapon" class="row row-cols-auto g-4">
+      <div *ngFor="let item of groupedItems[3]" class="col">
+        <div class="card h-100" style="width: 15.68rem;">
+          <img [src]="item.imageSafeUrl" style="width: 15.68rem; height: 10rem;" class="card-img-top" alt="{{ item.name }}" title="{{ item.name }}">
+          <div class="card-body">
+            <h5 class="card-title text-center">{{ item.name }}</h5>
+            <p class="card-text text-break desc fw-lighter">{{ item.description }}</p>
+            <p class="card-text fst-italic fw-lighter fw-bold" style="display: inline-block;">Ціна: {{ item.price }} зол.</p>
+            <button *ngIf="isLogged" type="button" (click)="handleAddToCartClick(item)" class="btn btn-secondary" style="float: right; ">У кошик</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <h4 *ngIf="groupedItems[2] && groupedItems[2].length > 0 && isClothes" style="margin: 1rem;">Одяг</h4> <!-- clothers -->
+    <div *ngIf="groupedItems[2] && groupedItems[2].length > 0 && isClothes" class="row row-cols-auto g-4">
+      <div *ngFor="let item of groupedItems[2]" class="col">
+        <div class="card h-100" style="width: 15.68rem;">
+          <img [src]="item.imageSafeUrl" style="width: 15.68rem; height: 10rem;" class="card-img-top" alt="{{ item.name }}" title="{{ item.name }}">
+          <div class="card-body">
+            <h5 class="card-title text-center">{{ item.name }}</h5>
+            <p class="card-text text-break desc fw-lighter">{{ item.description }}</p>
+            <p class="card-text fst-italic fw-lighter fw-bold" style="display: inline-block;">Ціна: {{ item.price }} зол.</p>
+            <button *ngIf="isLogged" type="button" (click)="handleAddToCartClick(item)" class="btn btn-secondary" style="float: right; ">У кошик</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <h4 *ngIf="groupedItems[1] && groupedItems[1].length > 0 && isAnimals" style="margin: 1rem;">Тварини</h4> <!-- animals -->
+    <div *ngIf="groupedItems[1] && groupedItems[1].length > 0 && isAnimals" class="row row-cols-auto g-4">
+      <div *ngFor="let item of groupedItems[1]" class="col">
+        <div class="card h-100" style="width: 15.68rem;">
+          <img [src]="item.imageSafeUrl" style="width: 15.68rem; height: 10rem;" class="card-img-top" alt="{{ item.name }}" title="{{ item.name }}">
+          <div class="card-body">
+            <h5 class="card-title text-center">{{ item.name }}</h5>
+            <p class="card-text text-break desc fw-lighter">{{ item.description }}</p>
+            <p class="card-text fst-italic fw-lighter fw-bold" style="display: inline-block;">Ціна: {{ item.price }} зол.</p>
+            <button *ngIf="isLogged" type="button" (click)="handleAddToCartClick(item)" class="btn btn-secondary" style="float: right; ">У кошик</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <h4 *ngIf="groupedItems[0] && groupedItems[0].length > 0 && isBuildings" style="margin: 1rem;">Будівля</h4> <!-- buildings -->
+    <div *ngIf="groupedItems[0] && groupedItems[0].length > 0 && isBuildings" class="row row-cols-auto g-4">
+      <div *ngFor="let item of groupedItems[0]" class="col">
+        <div class="card h-100" style="width: 15.68rem;">
+          <img [src]="item.imageSafeUrl" style="width: 15.68rem; height: 10rem;" class="card-img-top" alt="{{ item.name }}" title="{{ item.name }}">
+          <div class="card-body">
+            <h5 class="card-title text-center">{{ item.name }}</h5>
+            <p class="card-text text-break desc fw-lighter">{{ item.description }}</p>
+            <p class="card-text fst-italic fw-lighter fw-bold" style="display: inline-block;">Ціна: {{ item.price }} зол.</p>
+            <button *ngIf="isLogged" type="button" (click)="handleAddToCartClick(item)" class="btn btn-secondary" style="float: right; ">У кошик</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>

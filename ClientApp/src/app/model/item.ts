@@ -1,3 +1,4 @@
+import { SafeUrl } from "@angular/platform-browser";
 import { BaseEntity } from "./base-entity";
 import { ItemCategory } from "./enum/item-category";
 
@@ -7,4 +8,5 @@ export class Item extends BaseEntity {
   price!: number;
   isHidden!: boolean;
   imageUrl!: string;
+  imageSafeUrl!: SafeUrl;
 }

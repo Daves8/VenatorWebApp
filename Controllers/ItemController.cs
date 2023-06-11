@@ -1,5 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using VenatorWebApp.Models;
+using VenatorWebApp.Models.Common;
 using VenatorWebApp.Services;
 
 namespace VenatorWebApp.Controllers
@@ -18,8 +20,38 @@ namespace VenatorWebApp.Controllers
         [HttpGet("test")]
         public string Test() => "Ok";
 
-        [HttpGet]
-        //[Authorize(Policy = AuthPolicy.ADMINISTRATOR_REQUIRE)]
-        public IEnumerable<Item> GetItems() => _itemService.GetAllItems();
+        [HttpGet("{id}")]
+        public Item GetNews(int id) => _itemService.GetItem(id);
+
+        [HttpGet("all-items")]
+        [Authorize(Policy = AuthPolicy.MODERATOR_REQUIRE)]
+        public IEnumerable<Item> GetAllItems() => _itemService.GetAllItems();
+
+        [HttpGet("not-hidden-items")]
+        public IEnumerable<Item> GetAllNotHiddenItems() => _itemService.GetAllNotHiddenItems();
+
+        [HttpPost("add-to-cart")]
+        [Authorize]
+        public void AddItemToCart(Item item) => _itemService.AddItemToCart(item);
+
+        [HttpGet("remove-all-items-from-cart")]
+        [Authorize]
+        public void RemoveAllItemsFromCart() => _itemService.RemoveAllItemsFromCart();
+
+        [HttpGet("buy-items-in-cart")]
+        [Authorize]
+        public void BuyItemsInCart() => _itemService.BuyItemsInCart();
+
+        [HttpGet("items-in-cart")]
+        [Authorize]
+        public IEnumerable<Item> GetAllItemsInCart() => _itemService.GetAllItemsInCart();
+
+        [HttpGet("items-in-inventory")]
+        [Authorize]
+        public IEnumerable<Item> GetAllItemsInInventory() => _itemService.GetAllPurchasedItems();
+
+        [HttpGet("recommended-items")]
+        [Authorize]
+        public IEnumerable<Item> GetRecommendedItems() => _itemService.GetRecomendedItems();
     }
 }

@@ -53,13 +53,13 @@ namespace VenatorWebApp.Controllers
         [Authorize]
         public void DislikeNews(News news) => _contentService.Dislike(news);
 
-        [HttpPost("like-comment-to-news")]
+        [HttpPost("like-comment")]
         [Authorize]
-        public void LikeCommentToNews(Comment news) => _contentService.Like(news);
+        public void LikeComment(Comment news) => _contentService.Like(news);
 
-        [HttpPost("dislike-comment-to-news")]
+        [HttpPost("dislike-comment")]
         [Authorize]
-        public void DislikeCommentToNews(Comment news) => _contentService.Dislike(news);
+        public void DislikeComment(Comment news) => _contentService.Dislike(news);
 
     }
 }
