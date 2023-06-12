@@ -44,11 +44,13 @@ namespace VenatorWebApp.Services.Impl
             {
                 user.GoldAmount -= itemsInUserPriceSum;
                 _userService.UpdateUser(user);
+                _itemDao.BuyAllItemsInCart(user);
 
-                foreach (var item in itemsInUserCart)
+                // if user has several items with the same id in the cart, then only one will be bought
+                /*foreach (var item in itemsInUserCart)
                 {
                     _itemDao.ModifyItemInUser(item, user, ItemIn.Inventory);
-                }
+                }*/
             }
             else
             {

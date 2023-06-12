@@ -28,7 +28,7 @@ export class ItemService {
   }
 
   getItemImage(item: Item) {
-    const url = getBaseUrl() + "img/item/" + item.category + "" + item.imageUrl;
+    const url = getBaseUrl() + "img/item/" + item.category + "/" + item.imageUrl;
     return this.http.get(url, { responseType: 'arraybuffer' });
   }
 
@@ -49,7 +49,7 @@ export class ItemService {
   }
 
   getCurrentUser(): Observable<any> {
-    return this.http.get(getBaseUrl() + 'user/' + this.storageService.getUserId());
+    return this.http.get(getBaseUrl() + 'auth/current-user');
   }
 
   getItemCategoryLabel(category: ItemCategory): string {

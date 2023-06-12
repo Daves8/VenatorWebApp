@@ -37,6 +37,8 @@ namespace VenatorWebApp.Services.Impl
             }
 
             _userDao.CreateUser(user);
+            //TODO: rework without query
+            _userDao.InitUserStatistics(GetUserByUsername(user.Name));
         }
 
         public void DeleteUser(User user) => _userDao.DeleteUser(user);

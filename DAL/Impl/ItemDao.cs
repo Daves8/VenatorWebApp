@@ -23,6 +23,12 @@ namespace VenatorWebApp.DAL.Impl
             connection.Execute("DBO.ADD_ITEM_IN_USER", parameters, commandType: System.Data.CommandType.StoredProcedure);
         }
 
+        public void BuyAllItemsInCart(User user)
+        {
+            using var connection = GetConnection();
+            connection.QueryFirstOrDefault<Item>("DBO.BUY_ALL_ITEMS_IN_CART", new { USER_ID = user.Id }, commandType: System.Data.CommandType.StoredProcedure);
+        }
+
         public void CreateItem(Item item)
         {
             using var connection = GetConnection();

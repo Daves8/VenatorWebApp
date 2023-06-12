@@ -12,5 +12,6 @@ namespace VenatorWebApp.DAL
         void UpdateUser(User user);
         void DeleteUser(User user);
         Statistics QueryUserStatistics(User user);
+        void InitUserStatistics(User user);
     }
 }

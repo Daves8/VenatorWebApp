@@ -34,6 +34,12 @@ namespace VenatorWebApp.DAL.Impl
             connection.Execute("DBO.DELETE_USER", new { ID = user.Id }, commandType: System.Data.CommandType.StoredProcedure);
         }
 
+        public void InitUserStatistics(User user)
+        {
+            using var connection = GetConnection();
+            connection.Execute("DBO.INIT_USER_STATISTICS", new { USER_ID = user.Id }, commandType: System.Data.CommandType.StoredProcedure);
+        }
+
         public IEnumerable<User> QueryAllUsers()
         {
             using var connection = GetConnection();

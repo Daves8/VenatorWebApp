@@ -1,1 +1,175 @@
-<p>profile works!</p>
+
+<div class="row" style="padding-top: 3rem; padding-bottom: 1rem">
+  <div class="col-12"><h2> {{ user.name }} </h2></div>
+</div>
+
+
+
+<div class="row">
+
+  <div class="col-5">
+    <img [src]="user.imageSafeUrl" style="width: 18rem; height: 18rem;" class="rounded" alt="{{ user.name }}" title="{{ user.name }}">
+  </div>
+
+
+  <div class="col-7 fs-5">
+
+    <h4>Ваші дані:</h4>
+
+    <div *ngIf="user">
+      <div class="row">
+        <div class="col-4">
+          <p>Повне ім'я:</p>
+        </div>
+        <div class="col-8">
+          <p>{{ user.fullName }}</p>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-4">
+          <p>Електронна адреса:</p>
+        </div>
+        <div class="col-8">
+          <p>{{ user.email }}</p>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-4">
+          <p>Номер телефону:</p>
+        </div>
+        <div class="col-8">
+          <p>{{ user.phoneNumber }}</p>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-4">
+          <p>Дата реєстрації:</p>
+        </div>
+        <div class="col-8">
+          <p>{{ user.creationDate | date:'dd.MM.yyyy' }}</p>
+        </div>
+      </div>
+    </div>
+
+
+    <h4 class="mt-2">Ігрова статистика:</h4>
+    <div *ngIf="statistics">
+      <div class="row">
+        <div class="col-4">
+          <p>Кількість предметів:</p>
+        </div>
+        <div class="col-1">
+          <p>{{ statistics.totalItems }}</p>
+        </div>
+        <div class="col-2">
+          <p>Золота:</p>
+        </div>
+        <div class="col-1">
+          <p>{{ user.goldAmount.toFixed(2) }}</p>
+        </div>
+      </div>
+
+
+      <div class="row">
+        <div class="col-4">
+          <p>Витрачено золота:</p>
+        </div>
+        <div class="col-8">
+          <p>{{ statistics.goldSpent.toFixed(2) }}</p>
+        </div>
+      </div>
+
+
+      <div class="row">
+        <div class="col-4">
+          <p>Виконаних завдань:</p>
+        </div>
+        <div class="col-8">
+          <p>{{ statistics.completedQuestsCounter }}</p>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-4">
+          <p>Вбивств:</p>
+        </div>
+        <div class="col-8">
+          <p>{{ statistics.totalKilled }}</p>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-4">
+          <p>Із них:</p>
+        </div>
+        <div class="col-1"></div>
+        <div class="col-2">
+          <p>гравців:</p>
+          <p>NPC:</p>
+          <p>тварин:</p>
+        </div>
+        <div class="col-1">
+          <p>{{ statistics.killedPlayersCounter }}</p>
+          <p>{{ statistics.killedNpcCounter }}</p>
+          <p>{{ statistics.killedAnimalsCounter }}</p>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-4">
+          <p>Смертей:</p>
+        </div>
+        <div class="col-8">
+          <p>{{ statistics.totalDeath }}</p>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-4">
+          <p>Із них:</p>
+        </div>
+        <div class="col-1"></div>
+        <div class="col-2">
+          <p>гравців:</p>
+          <p>NPC:</p>
+          <p>тварин:</p>
+        </div>
+        <div class="col-1">
+          <p>{{ statistics.deathFromPlayersCounter }}</p>
+          <p>{{ statistics.deathFromNpcCounter }}</p>
+          <p>{{ statistics.deathFromAnimalsCounter }}</p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+
+
+<div class="row mt-2" *ngIf="items.length > 0">
+  <div class="col-12" style="margin-bottom: 3rem;">
+    <h4 class="mb-3">Інвентар</h4>
+    <div class="row row-cols-auto g-4">
+      <div *ngFor="let item of items" class="col">
+        <div class="card h-100" style="width: 15.68rem;">
+          <img [src]="item.imageSafeUrl" style="width: 15.68rem; height: 10rem;" class="card-img-top" alt="{{ item.name }}" title="{{ item.name }}">
+          <div class="card-body">
+            <h5 class="card-title text-center">{{ item.name }}</h5>
+            <p class="card-text fst-italic text-center fs-5">{{ getItemCategoryLabel(item.category) }}</p>
+            <p class="card-text text-break desc fw-lighter">{{ item.description }}</p>
+            <p class="card-text fst-italic fw-lighter fw-bold" style="display: inline-block;">Ціна: {{ item.price }} </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div class="row mt-2" *ngIf="items.length == 0">
+  <div class="col-12" style="margin-bottom: 3rem;">
+    <h4 class="mb-3">Інвентар пустий</h4>
+  </div>
+</div>
+

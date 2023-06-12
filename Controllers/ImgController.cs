@@ -8,7 +8,8 @@ namespace VenatorWebApp.Controllers
     public class ImgController : ControllerBase
     {
         private readonly IWebHostEnvironment _environment;
-        protected const string DEFAULT_IMG = "/img/default.png";
+        protected const string DEFAULT_ITEM_IMG = "/img/item/default.png";
+        protected const string DEFAULT_USER_IMG = "/img/user/default.png";
 
         public ImgController(IWebHostEnvironment environment)
         {
@@ -31,7 +32,7 @@ namespace VenatorWebApp.Controllers
             }
             else
             {
-                var imageBytes = System.IO.File.ReadAllBytes(_environment.WebRootPath + DEFAULT_IMG);
+                var imageBytes = System.IO.File.ReadAllBytes(_environment.WebRootPath + DEFAULT_ITEM_IMG);
                 return File(imageBytes, "image/jpeg");
             }
         }
@@ -49,7 +50,7 @@ namespace VenatorWebApp.Controllers
             }
             else
             {
-                var imageBytes = System.IO.File.ReadAllBytes(_environment.WebRootPath + DEFAULT_IMG);
+                var imageBytes = System.IO.File.ReadAllBytes(_environment.WebRootPath + DEFAULT_USER_IMG);
                 return File(imageBytes, "image/jpeg");
             }
         }

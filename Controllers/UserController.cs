@@ -21,6 +21,9 @@ namespace VenatorWebApp.Controllers
         [HttpGet("{id}")]
         public User GetUser(int id) => _userService.GetUser(id);
 
+        [HttpGet("{id}/statistics")]
+        public Statistics GetUserStatistics(int id) => _userService.GetUserStatistics(new User(id));
+
         [HttpGet]
         //[Authorize(Policy = AuthPolicy.ADMINISTRATOR_REQUIRE)]
         public IEnumerable<User> GetUsers() => _userService.GetAllUsers();

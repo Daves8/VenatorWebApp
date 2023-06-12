@@ -14,4 +14,21 @@ export class UserService {
   getUser(user: User): Observable<any> {
     return this.http.post(getBaseUrl() + 'user/' + user.id, user, { observe: 'response' });
   }
+
+  getCurrentUser(): Observable<any> {
+    return this.http.get(getBaseUrl() + 'auth/current-user');
+  }
+
+  getUserStatistics(id: number): Observable<any> {
+    return this.http.get(getBaseUrl() + 'user/' + id + '/statistics');
+  }
+
+  getItemsInInventory(): Observable<any> {
+    return this.http.get(getBaseUrl() + 'item/items-in-inventory');
+  }
+
+  getUserImage(user: User) {
+    const url = getBaseUrl() + "img/user/" + user.name;
+    return this.http.get(url, { responseType: 'arraybuffer' });
+  }
 }

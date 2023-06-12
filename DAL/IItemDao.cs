@@ -16,5 +16,6 @@ namespace VenatorWebApp.DAL
         void CreateItem(Item item);
         void UpdateItem(Item item);
         void DeleteItem(Item item);
+        void BuyAllItemsInCart(User user);
     }
 }

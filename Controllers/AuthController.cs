@@ -33,5 +33,8 @@ namespace VenatorWebApp.Controllers
             Response.Headers.Add("Authorization", "Bearer " + result.token);
             return result.user;
         }
+
+        [HttpGet("current-user")]
+        public User GetCurrentUser() => _authService.GetCurrentUser();
     }
 }
