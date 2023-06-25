@@ -57,5 +57,8 @@ namespace VenatorWebApp.Controllers
         [HttpGet("recommended-items")]
         [Authorize]
         public IEnumerable<Item> GetRecommendedItems() => _itemService.GetRecomendedItems();
+
+        [HttpGet("predict")]
+        public IEnumerable<Item> GetRecomendedItems() => _itemService.GetRecomendedItems();
     }
 }

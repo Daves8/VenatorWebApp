@@ -35,7 +35,7 @@ namespace VenatorWebApp.Controllers
         public IEnumerable<News> GetAllNotHiddenNews() => _contentService.GetAllNews(false);
 
         [HttpPost("create-comment-to-news")]
-        [Authorize(Policy = AuthPolicy.MODERATOR_REQUIRE)]
+        [Authorize]
         public void CreateCommentToNews(Comment comment) => _contentService.CreateComment(comment);
 
         [HttpGet("all-comments-to-news/{id}")]
